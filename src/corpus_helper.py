@@ -56,7 +56,7 @@ def buildVocab(sentences, min_cnt=2):
     return [vocab, vocab_inv]
 
 
-def buildEmbed(vocab_list, embed_fn, word_limit=250000):
+def buildEmbed(vocab_list, embed_fn, word_limit=400000):
     # sanity check: vocab_list should be a list instead of dictionary
     if (type(vocab_list) != type([1,2])):
         print("vocab type: {}, not a list!".format(type(vocab_list)))
@@ -65,6 +65,7 @@ def buildEmbed(vocab_list, embed_fn, word_limit=250000):
     print("load pretrained word embeddings...")
     f = open(embed_fn, "r")
     header = f.readline()
+    print(header, header.strip().split())
     vocab_size, dim = np.array(header.strip().split(), "int")
 
     # read pretrained embedding
@@ -118,7 +119,7 @@ def buildVocabEmbed(train_pkl_list, train_tsf_pkl, embed_fn, raw_vec_path, save_
 
     
     # joint word embedding for train corpus
-    init_embed = buildEmbed(vocab_inv, embed_fn, 40000)
+    init_embed = buildEmbed(vocab_inv, embed_fn)
     # save raw_dataset_vec.txt for tuning
     f =  open(raw_vec_path, "w")
     vocab_size = len(vocab)
@@ -178,7 +179,7 @@ def tuneEmbed(train_corpus, total_lines, raw_vec_path, tune_vec_path):
 def saveTuneEmbed(save_folder, tune_vec_path):
     with open(save_folder+"vocab_inv.pkl", "rb") as handle:
         vocab_list = pickle.load(handle)
-    init_embed = buildEmbed(vocab_list, tune_vec_path, word_limit=250000)
+    init_embed = buildEmbed(vocab_list, tune_vec_path)
     with open(save_folder+"init_embed.pkl", "wb") as handle:
         pickle.dump(init_embed, handle)
     print("saving init_embed shape: {}".format(np.shape(init_embed)))
@@ -186,7 +187,7 @@ def saveTuneEmbed(save_folder, tune_vec_path):
     
     with open(save_folder+"tsf_vocab_inv.pkl", "rb") as handle:
         tsf_vocab_list = pickle.load(handle)
-    tsf_init_embed = buildEmbed(tsf_vocab_list, tune_vec_path, word_limit=250000)
+    tsf_init_embed = buildEmbed(tsf_vocab_list, tune_vec_path)
     with open(save_folder+"tsf_init_embed.pkl", "wb") as handle:
         pickle.dump(tsf_init_embed, handle)
     print("saving tsf_init_embed shape: {}".format(np.shape(tsf_init_embed)))

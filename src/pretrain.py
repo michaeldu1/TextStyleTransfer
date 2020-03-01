@@ -115,15 +115,19 @@ def generatePretrainRNNLMSamples(tsf_sents):
 
 def pretrainRNNLM(sess, rnnlm, tsf_sents, lm_epochs, lm_learning_rate, lm_decay_rate, lm_batch_size):
     input_x, input_y = generatePretrainRNNLMSamples(tsf_sents)
+    print('shapes', tf.shape(input_x), tf.shape(input_y))
     for e in range(lm_epochs):
         sess.run(tf.assign(rnnlm.lr, lm_learning_rate * (lm_decay_rate ** e)))
         state =  sess.run(rnnlm.initial_state)
+        print('batch_size', lm_batch_size)
         rnnlm_batches = data_helpers.batch_iter(list(zip(input_x, input_y)), lm_batch_size, 1)
         batch_count = 0
         for batch in rnnlm_batches:
+            print(batch_count)
             batch_x, batch_y = zip(*batch)
             feed = {rnnlm.input_data: batch_x, rnnlm.targets: batch_y, \
                     rnnlm.initial_state: state}
+
             train_loss, state, _, _ = sess.run([rnnlm.cost, rnnlm.final_state, \
                                                 rnnlm.train_op, rnnlm.inc_batch_pointer_op], feed)
             if (batch_count  % 600 == 0):

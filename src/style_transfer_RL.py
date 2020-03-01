@@ -101,7 +101,7 @@ def main(_):
     print("# of dev orig_sents: {}".format(len(dev_orig_sents)))
     
     
-    PRETRAINED_MODEL = pretrained_model_folder + FLAGS.pretrained_model_path
+    PRETRAINED_MODEL = pretrained_model_folder + FLAGS.pretrained_model_path if FLAGS.pretrained_model_path is not None else 'model'
     if (FLAGS.use_pretrained_model):
         saver.restore(sess, PRETRAINED_MODEL)
         print("restore an existing model...")
