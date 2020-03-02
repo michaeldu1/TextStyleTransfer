@@ -101,7 +101,7 @@ def main(_):
     print("# of dev orig_sents: {}".format(len(dev_orig_sents)))
     
     
-    PRETRAINED_MODEL = pretrained_model_folder + FLAGS.pretrained_model_path if FLAGS.pretrained_model_path is not None else 'model'
+    PRETRAINED_MODEL = pretrained_model_folder + (FLAGS.pretrained_model_path if FLAGS.pretrained_model_path is not None else 'model')
     if (FLAGS.use_pretrained_model):
         saver.restore(sess, PRETRAINED_MODEL)
         print("restore an existing model...")
@@ -115,14 +115,14 @@ def main(_):
         # Better change: tsf_decoder_sents as input -> also change init embed in training RNNLM
         pretrain.pretrainRNNLM(sess, rnnlm, tsf_encoder_sents, FLAGS.lm_epochs, FLAGS.lm_learning_rate, \
                       FLAGS.lm_decay_rate, FLAGS.batch_size)
-        
+        saver.save(sess, PRETRAINED_MODEL)
         # pretrain discriminator
         print("pretrain discriminator...")
         pretrain.pretrainStyleDiscriminator(sess, style_discriminator, orig_sents, orig_sent_len, \
                                    tsf_encoder_sents, tsf_encoder_sent_len, \
                                    FLAGS.style_epochs, FLAGS.batch_size)
         
-
+        saver.save(sess, PRETRAINED_MODEL)
         print("pretrain generator...")
         pretrain.pretrainGenerator(sess, generator, tsf_encoder_sents, tsf_encoder_sent_len, \
                                    tsf_decoder_sents, tsf_decoder_sent_len, \
