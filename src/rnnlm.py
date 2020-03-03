@@ -5,6 +5,8 @@ word based language model
 import tensorflow as tf
 from tensorflow.contrib import rnn
 from tensorflow.contrib import legacy_seq2seq
+#from tensorflow_addons import rnn
+#from tensorflow_addons import seq2seq as legacy_seq2seq
 import random
 import numpy as np
 from beam import BeamSearch

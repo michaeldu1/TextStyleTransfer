@@ -8,6 +8,8 @@ import math
 import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.seq2seq as seq2seq
+#import tensorflow_addons.seq2seq as seq2seq
+
 
 from tensorflow.python.ops.rnn_cell import GRUCell
 from tensorflow.python.ops.rnn_cell import LSTMCell
@@ -22,6 +24,10 @@ from tensorflow.python.layers.core import Dense
 from tensorflow.python.util import nest
 from tensorflow.contrib.seq2seq.python.ops import attention_wrapper
 from tensorflow.contrib.seq2seq.python.ops import beam_search_decoder
+# from tensorflow_addons.seq2seq
+# from tensorflow_addons.seq2seq.attention_wrapper import AttentionWrapper as attention_wrapper
+# from tensorflow_addons.seq2seq.beam_search_decoder import BeamSearchDecoder as beam_search_decoder
+
 from tensorflow.python.ops import tensor_array_ops
 import params
 
